@@ -36,7 +36,8 @@ means following dozens of sources and watching deadlines by hand.
 | Quality | xUnit, Testcontainers, Playwright, GitHub Actions |
 | Delivery | Docker, deployed with a public demo |
 
-Architectural decisions are recorded in [`docs/adr`](docs/adr).
+Architectural decisions are recorded in [`docs/adr`](docs/adr), and the planned
+database is described in [`docs/data-model.md`](docs/data-model.md).
 
 ## License
 
