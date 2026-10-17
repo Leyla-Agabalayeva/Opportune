@@ -1,0 +1,38 @@
+erDiagram
+    User ||--o{ RefreshToken : owns
+    User ||--o{ UserSkill : has
+    Skill ||--o{ UserSkill : "used by"
+    User ||--o{ UserLanguage : speaks
+    User ||--o{ UserInterest : "interested in"
+    Category ||--o{ UserInterest : "chosen by"
+    User ||--o{ RecommendationCache : "cached for"
+
+    User {
+        uuid Id PK
+        string Email
+        string FirstName
+        string LastName
+        date BirthDate
+        string Country
+        string Bio
+        string PreferredLanguage
+    }
+    RefreshToken {
+        uuid Id PK
+        uuid UserId FK
+        string TokenHash
+        timestamptz ExpiresAt
+        timestamptz RevokedAt
+    }
+    UserLanguage {
+        uuid UserId PK
+        string LanguageCode PK
+        string Level
+    }
+    RecommendationCache {
+        uuid Id PK
+        uuid UserId FK
+        string ProfileHash
+        jsonb ResultJson
+        timestamptz ExpiresAt
+    }
