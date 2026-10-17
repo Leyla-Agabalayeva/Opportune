@@ -19,78 +19,28 @@ diagram shows the main columns, the tables below list everything.
   columns (AZ / EN / RU) instead of translation tables.
 - Nothing important is hard-deleted: opportunities are archived, not removed.
 
-## Diagram
+## Diagrams
 
-```mermaid
-erDiagram
-    User ||--o{ UserSkill : has
-    Skill ||--o{ UserSkill : "used by"
-    User ||--o{ UserLanguage : speaks
-    User ||--o{ UserInterest : "interested in"
-    Category ||--o{ UserInterest : "chosen by"
-    User ||--o{ RefreshToken : owns
+The model is split into three diagrams so each one stays readable. The Mermaid
+sources are in [`diagrams/`](diagrams); regenerate the images after editing a
+source with
+`npx @mermaid-js/mermaid-cli -i docs/diagrams/1-catalog.mmd -o docs/diagrams/1-catalog.png -s 2 -b white`.
 
-    User ||--o{ Organization : owns
-    Organization ||--o{ Opportunity : publishes
-    Category ||--o{ Opportunity : classifies
-    User ||--o{ Opportunity : "created by"
+### 1. Catalog
+Organizations, opportunities and everything that describes them.
 
-    Opportunity ||--o{ OpportunityRequiredLanguage : requires
-    Opportunity ||--o{ OpportunitySkill : "wants"
-    Skill ||--o{ OpportunitySkill : "wanted by"
-    Opportunity ||--o{ OpportunityTranslation : "cached as"
+![Catalog diagram](diagrams/1-catalog.png)
 
-    User ||--o{ SavedOpportunity : saves
-    Opportunity ||--o{ SavedOpportunity : "saved by"
-    User ||--o{ ApplicationTracking : tracks
-    Opportunity ||--o{ ApplicationTracking : "tracked in"
-    User ||--o{ Participation : "took part in"
-    Opportunity ||--o{ Participation : "has participants"
-    Participation ||--o| Review : "reviewed by"
+### 2. User activity
+What a person does with opportunities: saving, tracking, taking part, reviewing,
+subscribing and being notified.
 
-    User ||--o{ Subscription : subscribes
-    Category |o--o{ Subscription : "filter"
-    User ||--o{ Notification : receives
-    Opportunity |o--o{ Notification : "about"
-    User ||--o{ RecommendationCache : "cached for"
+![User activity diagram](diagrams/2-user-activity.png)
 
-    User {
-        uuid Id PK
-        string Email
-        string FirstName
-        string LastName
-        date BirthDate
-        string Country
-        string PreferredLanguage
-    }
-    Organization {
-        uuid Id PK
-        uuid OwnerUserId FK
-        string Name
-        string Slug
-        bool IsVerified
-    }
-    Opportunity {
-        uuid Id PK
-        uuid OrganizationId FK
-        uuid CategoryId FK
-        string Title
-        string Scope
-        string Country
-        date ApplicationDeadline
-        bool AccommodationCovered
-        string Status
-        string VerificationLevel
-        tsvector SearchVector
-    }
-    Review {
-        uuid Id PK
-        uuid ParticipationId FK
-        int Rating
-        string Text
-    }
-```
+### 3. Accounts and profile
+The user, login tokens, skills, languages, interests and cached recommendations.
 
+![Accounts diagram](diagrams/3-accounts.png)
 ## Entities
 
 ### Accounts
