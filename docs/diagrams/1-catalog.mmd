@@ -1,0 +1,50 @@
+erDiagram
+    Organization ||--o{ Opportunity : publishes
+    Category ||--o{ Opportunity : classifies
+    User ||--o{ Organization : owns
+    User ||--o{ Opportunity : "created by"
+    Opportunity ||--o{ OpportunityRequiredLanguage : requires
+    Opportunity ||--o{ OpportunitySkill : wants
+    Skill ||--o{ OpportunitySkill : "wanted by"
+    Opportunity ||--o{ OpportunityTranslation : "cached as"
+
+    Organization {
+        uuid Id PK
+        uuid OwnerUserId FK
+        string Name
+        string Slug
+        string WebsiteUrl
+        bool IsVerified
+    }
+    Opportunity {
+        uuid Id PK
+        uuid OrganizationId FK
+        uuid CategoryId FK
+        string Title
+        string OriginalLanguage
+        string Scope
+        string Country
+        date ApplicationDeadline
+        bool AccommodationCovered
+        bool MealsCovered
+        bool TravelCovered
+        decimal ParticipationFee
+        string ApplyUrl
+        string VerificationLevel
+        string Status
+        tsvector SearchVector
+    }
+    OpportunityTranslation {
+        uuid Id PK
+        uuid OpportunityId FK
+        string LanguageCode
+        string SourceHash
+    }
+    Category {
+        uuid Id PK
+        string Slug
+    }
+    Skill {
+        uuid Id PK
+        string Slug
+    }

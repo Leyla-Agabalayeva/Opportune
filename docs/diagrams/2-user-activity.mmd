@@ -1,0 +1,51 @@
+erDiagram
+    User ||--o{ SavedOpportunity : saves
+    Opportunity ||--o{ SavedOpportunity : "saved by"
+    User ||--o{ ApplicationTracking : tracks
+    Opportunity ||--o{ ApplicationTracking : "tracked in"
+    User ||--o{ Participation : "took part in"
+    Opportunity ||--o{ Participation : "has participants"
+    Participation ||--o| Review : "reviewed by"
+    User ||--o{ Subscription : subscribes
+    Category |o--o{ Subscription : filters
+    User ||--o{ Notification : receives
+    Opportunity |o--o{ Notification : about
+
+    SavedOpportunity {
+        uuid UserId PK
+        uuid OpportunityId PK
+        timestamptz SavedAt
+    }
+    ApplicationTracking {
+        uuid Id PK
+        uuid UserId FK
+        uuid OpportunityId FK
+        string Status
+        string Notes
+    }
+    Participation {
+        uuid Id PK
+        uuid UserId FK
+        uuid OpportunityId FK
+        date StartDate
+        date EndDate
+    }
+    Review {
+        uuid Id PK
+        uuid ParticipationId FK
+        int Rating
+        string Text
+        bool IsHidden
+    }
+    Subscription {
+        uuid Id PK
+        uuid UserId FK
+        uuid CategoryId FK
+        string Country
+    }
+    Notification {
+        uuid Id PK
+        uuid UserId FK
+        string Type
+        bool IsRead
+    }
