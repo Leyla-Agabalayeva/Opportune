@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17
+    container_name: opportune-db
+    environment:
+      POSTGRES_DB: opportune
+      POSTGRES_USER: opportune
+      # The real value lives in .env (not in git); see .env.example.
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - opportune-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opportune -d opportune"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  opportune-db-data:
