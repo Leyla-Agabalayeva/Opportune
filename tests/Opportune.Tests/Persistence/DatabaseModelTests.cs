@@ -271,9 +271,12 @@ public class DatabaseModelTests(PostgresFixture postgres)
         db.Participations.Add(new Participation { Id = Guid.NewGuid(), UserId = volunteer.Id, OpportunityId = opportunity.Id });
         await db.SaveChangesAsync();
 
-        db.Opportunities.Remove(opportunity);
+        // A fresh context does not track the participation, so the delete reaches the database
+        // and it is PostgreSQL, not EF's change tracker, that refuses it.
+        await using var db2 = postgres.NewContext();
+        db2.Opportunities.Remove(await db2.Opportunities.SingleAsync(o => o.Id == opportunity.Id));
 
-        await AssertViolationAsync(() => db.SaveChangesAsync(), ForeignKeyViolation);
+        await AssertViolationAsync(() => db2.SaveChangesAsync(), ForeignKeyViolation);
     }
 
     [Fact]
